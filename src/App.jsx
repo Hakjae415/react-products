@@ -1,50 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
-import AllProducts from './components/AllProducts';
-import SingleProduct from './components/SingleProduct';
+import Root from './components/Root';
+import Navbar from './components/Navbar';
+import Cart from './components/Cart'
 
 function App() {
-  const [listProducts, setListProducts] = useState([]);
-  const [oneProduct, setOneProduct] = useState(null);
-  const [isProductClicked, setIsProductClicked] = useState(false);
-
-  useEffect(() => {
-    const fetchAll = async () => {
-      try {
-        const response = await fetch("https://dummyjson.com/products");
-        const data = await response.json();
-        console.log(data.products);
-        setListProducts(data.products);
-      } catch (err) {
-        console.error("Store is Loading....", err);
-      }
-    };
-    fetchAll();
-  }, []);
-
-  const handleClick = async (id) => {
-    try {
-      const response = await fetch(`https://dummyjson.com/products/${id}`);
-      const data = await response.json();
-      setOneProduct(data);
-      setIsProductClicked(true);
-    } catch (err) {
-      console.error("Store Can't Find Single Product", err);
-    }
-  };
-
-  const handleGoBack = () => {
-    setOneProduct(null);
-    setIsProductClicked(false);
-  };
-
   return (
     <>
-      {isProductClicked ? (
-        <SingleProduct oneProduct={oneProduct} handleGoBack={handleGoBack} />
-      ) : (
-        <AllProducts listProducts={listProducts} handleClick={handleClick} />
-      )}
+      <Navbar/>
+      <Routes>
+        <Route path="/" element={<Root/>}/>
+        <Route path="cart" element={<Cart/>} />
+      </Routes>
     </>
   );
 }
